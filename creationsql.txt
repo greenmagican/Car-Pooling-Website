@@ -1,0 +1,92 @@
+-- Drop existing tables if they exist, with CASCADE to ensure all dependent entities are also dropped
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS trips CASCADE;
+DROP TABLE IF EXISTS vehicles CASCADE;
+DROP TABLE IF EXISTS preferences CASCADE;
+DROP TABLE IF EXISTS drivers CASCADE;
+DROP TABLE IF EXISTS passengers CASCADE;
+DROP TABLE IF EXISTS phone_numbers CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- Create the users table
+CREATE TABLE users (
+    email VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    password VARCHAR(255)
+);
+
+-- Create the phone_numbers table
+CREATE TABLE phone_numbers (
+    phone_number VARCHAR(20),
+    user_email VARCHAR(255),
+    PRIMARY KEY (phone_number, user_email),
+    FOREIGN KEY (user_email) REFERENCES users(email)
+);
+
+-- Create the drivers table
+CREATE TABLE drivers (
+    driver_email VARCHAR(255) PRIMARY KEY,
+    driver_license_no VARCHAR(50),
+    FOREIGN KEY (driver_email) REFERENCES users(email)
+);
+
+-- Create the passengers table
+CREATE TABLE passengers (
+    passenger_email VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (passenger_email) REFERENCES users(email)
+);
+
+-- Create the preferences table
+CREATE TABLE preferences (
+    driver_email VARCHAR(255),
+    preference VARCHAR(255),
+    PRIMARY KEY (driver_email, preference),
+    FOREIGN KEY (driver_email) REFERENCES drivers(driver_email)
+);
+
+-- Create the vehicles table
+CREATE TABLE vehicles (
+    plate_no VARCHAR(20) PRIMARY KEY,
+    color VARCHAR(50),
+    year INT,
+    model VARCHAR(50),
+    number_of_seats INT,
+    driver_email VARCHAR(255),
+    FOREIGN KEY (driver_email) REFERENCES drivers(driver_email)
+);
+
+-- Create the trips table
+CREATE TABLE trips (
+    trip_id SERIAL PRIMARY KEY,
+    from_location VARCHAR(255),
+    to_location VARCHAR(255),
+    passenger_capacity INT,
+    payment NUMERIC(10,2),
+    driver_email VARCHAR(255),
+    vehicle_plate_no VARCHAR(20),
+    FOREIGN KEY (driver_email) REFERENCES drivers(driver_email),
+    FOREIGN KEY (vehicle_plate_no) REFERENCES vehicles(plate_no)
+);
+
+-- Create the reviews table
+CREATE TABLE reviews (
+    review_id SERIAL,
+    passenger_email VARCHAR(255),
+    trip_id INT,
+    comment TEXT,
+    general_rating INT,
+    PRIMARY KEY (review_id, passenger_email, trip_id),
+    FOREIGN KEY (passenger_email) REFERENCES passengers(passenger_email),
+    FOREIGN KEY (trip_id) REFERENCES trips(trip_id)
+);
+
+-- Create the bookings table
+CREATE TABLE bookings (
+    trip_id INT,
+    passenger_email VARCHAR(255),
+    PRIMARY KEY (trip_id, passenger_email),
+    FOREIGN KEY (trip_id) REFERENCES trips(trip_id),
+    FOREIGN KEY (passenger_email) REFERENCES passengers(passenger_email)
+);

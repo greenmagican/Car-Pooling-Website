@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            margin-top: 30px;
+        }
+
+        .option {
+            background-color: #34495e;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .option a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .option:hover {
+            background-color: #3b5998;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-button:hover {
+            background-color: #c0392b;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="logout-button" onclick="window.location.href='/logout'">Logout</button>
+        <h1>Welcome to Your Home Page</h1>
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <div class="options">
+            <div class="option"><a href="/edit_profile">Edit Profile</a></div>
+            <div class="option"><a href="/add_trips">Add Trips</a></div>
+            <div class="option"><a href="/get_trips">Get Trips</a></div>
+            <div class="option"><a href="/remove_trips">Remove Trips</a></div>
+            <div class="option"><a href="/vehicle_operations">Vehicle Operations</a></div>
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Trips</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #ecf0f1;
+            text-align: center;
+        }
+
+        .form-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .form-section label {
+            margin-right: 10px;
+            color: #bdc3c7;
+        }
+
+        .form-section select, .form-section input {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            box-sizing: border-box;
+            background-color: #34495e;
+            color: #ecf0f1;
+            border: 1px solid #7f8c8d;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-section select:focus, .form-section input:focus {
+            background-color: #3b5998;
+            border-color: #3b5998;
+            outline: none;
+        }
+
+        .form-section input[type="submit"] {
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-right: 0;
+        }
+
+        .form-section input[type="submit"]:hover {
+            background-color: #c0392b;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success {
+            color: #27ae60;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #c0392b;
+        }
+
+        .trip-list {
+            width: 100%;
+            max-width: 800px;
+            background-color: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .trip-list h3 {
+            color: #ecf0f1;
+            text-align: center;
+        }
+
+        .trip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3b5998;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+        }
+
+        .trip-item div {
+            flex: 1;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .trip-item div:last-child {
+            margin-right: 0;
+        }
+
+        .trip-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .trip-item p {
+            margin: 0;
+            color: #bdc3c7;
+        }
+
+        .book-button {
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-button:hover {
+            background-color: #c0392b;
+        }
+
+        .cancel-button {
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="window.location.href='{{ url_for('home') }}'">Go Back to Home</button>
+        <div class="form-container">
+            <h2>Get Trips</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="post">
+                <div class="form-section">
+                    <label for="from">From</label>
+                    <select id="from" name="from" required>
+                        <option value="" disabled selected>Select departure city</option>
+                        <option value="Lefkoşa" {% if from_city == "Lefkoşa" %}selected{% endif %}>Lefkoşa</option>
+                        <option value="Gazimağusa" {% if from_city == "Gazimağusa" %}selected{% endif %}>Gazimağusa</option>
+                        <option value="Girne" {% if from_city == "Girne" %}selected{% endif %}>Girne</option>
+                        <option value="Güzelyurt" {% if from_city == "Güzelyurt" %}selected{% endif %}>Güzelyurt</option>
+                        <option value="İskele" {% if from_city == "İskele" %}selected{% endif %}>İskele</option>
+                    </select>
+                    <label for="to">To</label>
+                    <select id="to" name="to" required>
+                        <option value="" disabled selected>Select destination city</option>
+                        <option value="Lefkoşa" {% if to_city == "Lefkoşa" %}selected{% endif %}>Lefkoşa</option>
+                        <option value="Gazimağusa" {% if to_city == "Gazimağusa" %}selected{% endif %}>Gazimağusa</option>
+                        <option value="Girne" {% if to_city == "Girne" %}selected{% endif %}>Girne</option>
+                        <option value="Güzelyurt" {% if to_city == "Güzelyurt" %}selected{% endif %}>Güzelyurt</option>
+                        <option value="İskele" {% if to_city == "İskele" %}selected{% endif %}>İskele</option>
+                    </select>
+                    <input type="submit" value="Get Trips">
+                </div>
+            </form>
+        </div>
+
+        {% if available_trips %}
+        <div class="trip-list">
+            <h3>Available Trips</h3>
+            {% for trip in available_trips %}
+                <div class="trip-item">
+                    <div>
+                        <strong>From:</strong>
+                        <p>{{ trip[1] }}</p>
+                    </div>
+                    <div>
+                        <strong>To:</strong>
+                        <p>{{ trip[2] }}</p>
+                    </div>
+                    <div>
+                        <strong>Capacity:</strong>
+                        <p>{{ trip[3] }}</p>
+                    </div>
+                    <div>
+                        <strong>Price:</strong>
+                        <p>{{ trip[4] }}</p>
+                    </div>
+                    <div>
+                        <strong>Driver:</strong>
+                        <p>{{ trip[5] }}</p>
+                    </div>
+                    <div>
+                        <strong>Vehicle Plate No:</strong>
+                        <p>{{ trip[6] }}</p>
+                    </div>
+                    <div>
+                        <strong>Vehicle Color:</strong>
+                        <p>{{ trip[7] }}</p>
+                    </div>
+                    <div>
+                        <strong>Vehicle Year:</strong>
+                        <p>{{ trip[8] }}</p>
+                    </div>
+                    <div>
+                        <strong>Vehicle Model:</strong>
+                        <p>{{ trip[9] }}</p>
+                    </div>
+                    <div>
+                        <strong>Driver Preferences:</strong>
+                        <p>{{ trip[10] }}</p>
+                    </div>
+                    {% if trip[0] in booked_trips %}
+                        <form id="cancel-booking-form-{{ trip[0] }}" method="post" action="{{ url_for('cancel_booking') }}">
+                            <input type="hidden" name="trip_id" value="{{ trip[0] }}">
+                            <button type="submit" class="cancel-button">Cancel Booking</button>
+                        </form>
+                    {% else %}
+                        <form id="book-trip-form-{{ trip[0] }}" method="post" action="{{ url_for('book_trip') }}">
+                            <input type="hidden" name="trip_id" value="{{ trip[0] }}">
+                            <button type="submit" class="book-button">Book Trip</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

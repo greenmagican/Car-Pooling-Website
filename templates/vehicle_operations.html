@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Operations</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .vehicles {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .vehicle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #3b5998;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .vehicle label {
+            flex: 1;
+        }
+
+        .vehicle input[type="checkbox"] {
+            flex: 0 0 auto;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .actions button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions button:hover {
+            background-color: #c0392b;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Vehicle Operations</h2>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+        <div class="success">{{ success }}</div>
+        {% endif %}
+        <form method="post">
+            <div class="vehicles">
+                {% for vehicle in vehicles %}
+                <div class="vehicle">
+                    <label>{{ vehicle[0] }} - {{ vehicle[1] }} - {{ vehicle[2] }} - {{ vehicle[3] }}</label>
+                    <input type="checkbox" name="vehicles" value="{{ vehicle[0] }}">
+                </div>
+                {% endfor %}
+            </div>
+            <div class="actions">
+                <button type="submit" name="delete_vehicle">Drop The Selected Cars</button>
+                <button type="submit" name="add_vehicle">Add A Car</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Trip</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #ecf0f1;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #bdc3c7;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            background-color: #34495e;
+            color: #ecf0f1;
+            border: 1px solid #7f8c8d;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            background-color: #3b5998;
+            border-color: #3b5998;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #c0392b;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Add a Trip</h2>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        {% if 'trip_data' in session %}
+        <div class="form-section">
+            <label for="price">Enter Price</label>
+            <input type="number" id="price" name="price" min="{{ session.price_range.min_price }}" max="{{ session.price_range.max_price }}" required>
+        </div>
+        <div class="form-section">
+            <input type="submit" value="Add Trip">
+        </div>
+        {% else %}
+        <div class="form-section">
+            <label for="from">From</label>
+            <select id="from" name="from" required>
+                <option value="" disabled selected>Select departure city</option>
+                <option value="Lefkoşa">Lefkoşa</option>
+                <option value="Gazimağusa">Gazimağusa</option>
+                <option value="Girne">Girne</option>
+                <option value="Güzelyurt">Güzelyurt</option>
+                <option value="İskele">İskele</option>
+            </select>
+        </div>
+
+        <div class="form-section">
+            <label for="to">To</label>
+            <select id="to" name="to" required>
+                <option value="" disabled selected>Select destination city</option>
+                <option value="Lefkoşa">Lefkoşa</option>
+                <option value="Gazimağusa">Gazimağusa</option>
+                <option value="Girne">Girne</option>
+                <option value="Güzelyurt">Güzelyurt</option>
+                <option value="İskele">İskele</option>
+            </select>
+        </div>
+
+        <div class="form-section">
+            <label for="car">Car</label>
+            <select id="car" name="car" required>
+                <option value="" disabled selected>Select your car</option>
+                {% for car in available_cars %}
+                    <option value="{{ car[0] }}">{{ car[0] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-section">
+            <label for="capacity">Passenger Capacity</label>
+            <input type="number" id="capacity" name="capacity" placeholder="Number of passengers" required>
+        </div>
+
+        <div class="form-section">
+            <input type="submit" value="Next">
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+</body>
+</html>

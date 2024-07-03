@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Trips</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .trip-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .trip-item {
+            background-color: #34495e;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .trip-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .remove-button {
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .remove-button:hover {
+            background-color: #c0392b;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Remove Trips</h1>
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        {% if success %}
+        <div class="success-message">{{ success }}</div>
+        {% endif %}
+        <form method="POST">
+            <div class="trip-list">
+                {% for trip in trips %}
+                <div class="trip-item">
+                    <label>
+                        <input type="checkbox" name="trips" value="{{ trip[0] }}">
+                        From: {{ trip[1] }}, To: {{ trip[2] }}, Payment: ${{ trip[3] }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="remove-button">Remove Selected Trips</button>
+        </form>
+    </div>
+</body>
+</html>
